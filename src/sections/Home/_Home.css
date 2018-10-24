@@ -1,0 +1,13 @@
+.splash-img {
+  width: 100%;
+  position: relative;
+  padding: 0;
+}
+
+.splash-text {
+  position: absolute;
+	top: 140px;
+	left: 40px;
+	padding: 30px;
+	width: 50%;
+}

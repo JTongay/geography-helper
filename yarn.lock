@@ -38,9 +38,20 @@
     classnames "^2.2"
     tslib "^1.9.0"
 
+"@types/cheerio@*":
+  version "0.22.9"
+  resolved "https://registry.yarnpkg.com/@types/cheerio/-/cheerio-0.22.9.tgz#b5990152604c2ada749b7f88cab3476f21f39d7b"
+
 "@types/dom4@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/dom4/-/dom4-2.0.1.tgz#506d5781b9bcab81bd9a878b198aec7dee2a6033"
+
+"@types/enzyme@^3.1.14":
+  version "3.1.14"
+  resolved "https://registry.yarnpkg.com/@types/enzyme/-/enzyme-3.1.14.tgz#379c26205f6e0e272f3a51d6bbdd50071a9d03a6"
+  dependencies:
+    "@types/cheerio" "*"
+    "@types/react" "*"
 
 "@types/history@*":
   version "4.7.1"
