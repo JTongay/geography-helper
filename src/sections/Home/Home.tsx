@@ -1,12 +1,15 @@
+// import { Spinner } from '@blueprintjs/core';
 import * as React from 'react';
 import { Request } from 'src/agent';
-import { Search } from 'src/components';
+import { CountryBadge, Loading, Search } from 'src/components';
 import splashImg from '../../images/globe_splash.jpg';
+import { mockResult } from '../../mockResult';
 import './_Home.css';
 
 interface IHomeState {
   countryResult: any;
   countrySearch: string;
+  loading: boolean;
 }
 
 export class Home extends React.Component<{}, IHomeState> {
@@ -16,7 +19,8 @@ export class Home extends React.Component<{}, IHomeState> {
     this.setCountrySearchVal = this.setCountrySearchVal.bind(this);
     this.state = {
       countryResult: null,
-      countrySearch: ''
+      countrySearch: '',
+      loading: false
     };
   }
 
@@ -44,15 +48,25 @@ export class Home extends React.Component<{}, IHomeState> {
     this.setState({ countrySearch: val });
   }
 
+  public renderCountryBadges(countries: any[]): JSX.Element[] {
+    return countries.map((country, index) => {
+      return <CountryBadge key={index} loading={this.state.loading} country={country} />
+    });
+  }
+
   public async handleSearch(val: string): Promise<void> {
     let countryResult: any;
+    this.setState({ loading: true });
     try {
       countryResult = await Request.name(val);
       this.setState({
         countryResult
       })
     } catch (e) {
+      this.setState({ loading: false });
       throw new Error(e);
+    } finally {
+      this.setState({ loading: false });
     }
   }
 
@@ -70,6 +84,8 @@ export class Home extends React.Component<{}, IHomeState> {
           countrySearch={this.countrySearch}
           setCountrySearchVal={this.setCountrySearchVal}
         />
+        <Loading loading={this.state.loading} />
+        {this.renderCountryBadges(mockResult)}
       </section>
     )
   }

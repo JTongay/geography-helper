@@ -1,5 +1,5 @@
 /* tslint:disable */
-const mockResult: any = [
+export const mockResult: any = [
   {
     name: "British Indian Ocean Territory",
     topLevelDomain: [
