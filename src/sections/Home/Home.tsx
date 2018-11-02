@@ -1,15 +1,18 @@
 // import { Spinner } from '@blueprintjs/core';
+import { AxiosResponse } from 'axios';
 import * as React from 'react';
 import { Request } from 'src/agent';
-import { CountryBadge, Loading, Search } from 'src/components';
+import { CountryBadge, Loading, Search, SearchResults } from 'src/components';
+import { ICountryResult } from 'src/types';
 import splashImg from '../../images/globe_splash.jpg';
-import { mockResult } from '../../mockResult';
+// import { mockResult } from '../../mockResult';
 import './_Home.css';
 
 interface IHomeState {
   countryResult: any;
   countrySearch: string;
   loading: boolean;
+  error: boolean;
 }
 
 export class Home extends React.Component<{}, IHomeState> {
@@ -20,21 +23,10 @@ export class Home extends React.Component<{}, IHomeState> {
     this.state = {
       countryResult: null,
       countrySearch: '',
+      error: false,
       loading: false
     };
   }
-
-  // public async componentDidMount(): Promise<void> {
-  //   let response: any;
-  //   try {
-  //     response = await Request.name('us')
-  //     this.setState({
-  //       response
-  //     });
-  //   } catch(e) {
-  //     throw Error(e);
-  //   }
-  // }
 
   get countryResult(): any {
     return this.state.countryResult;
@@ -48,30 +40,30 @@ export class Home extends React.Component<{}, IHomeState> {
     this.setState({ countrySearch: val });
   }
 
-  public renderCountryBadges(countries: any[]): JSX.Element[] {
-    return countries.map((country, index) => {
-      return <CountryBadge key={index} loading={this.state.loading} country={country} />
-    });
+  public renderCountryBadges(countries: ICountryResult[]): JSX.Element[] | void {
+    if (countries) {
+      return countries.map((country, index) => {
+        return <CountryBadge key={index} loading={this.state.loading} country={country} />
+      });
+    }
   }
 
   public async handleSearch(val: string): Promise<void> {
-    let countryResult: any;
+    let countryResult: AxiosResponse<ICountryResult[]>;
     this.setState({ loading: true });
     try {
       countryResult = await Request.name(val);
       this.setState({
-        countryResult
+        countryResult: countryResult.data
       })
     } catch (e) {
-      this.setState({ loading: false });
-      throw new Error(e);
+      this.setState({ loading: false, error: true, countryResult: null });
     } finally {
       this.setState({ loading: false });
     }
   }
 
   public render(): JSX.Element {
-    console.log(this.countryResult)
     return (
       <section className="home-layout">
         <img src={splashImg} alt="" className="splash-img" />
@@ -85,7 +77,11 @@ export class Home extends React.Component<{}, IHomeState> {
           setCountrySearchVal={this.setCountrySearchVal}
         />
         <Loading loading={this.state.loading} />
-        {this.renderCountryBadges(mockResult)}
+        <SearchResults 
+          loading={this.state.loading}
+          countries={this.state.countryResult}
+          error={this.state.error}
+        />
       </section>
     )
   }

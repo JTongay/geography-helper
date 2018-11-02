@@ -1,0 +1,10 @@
+.country-badge {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.country-flag {
+  flex: 1;
+  max-width: 50px;
+}
