@@ -21,8 +21,8 @@ interface IRegionalBloc {
 export interface ICountryResult {
   name: string;
   topLevelDomain: string[];
-  alpha2code: string;
-  alpha3code: string;
+  alpha2Code: string;
+  alpha3Code: string;
   callingCodes: string[];
   capital: string;
   altSpellings: string[];
